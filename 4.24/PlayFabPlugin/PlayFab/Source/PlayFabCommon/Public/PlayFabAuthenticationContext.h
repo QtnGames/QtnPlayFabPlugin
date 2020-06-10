@@ -95,9 +95,11 @@ public:
 #if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)
         return DeveloperSecretKey;
 #endif
-
-        checkf(false, TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
-        return DeveloperSecretKey;
+		//QTN_ENGINE_MOD[kain: 6-9-2020] don't checkf when trying to verify usage of GetDeveloperSecretKey when the key is empty...
+		//checkf(false, TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
+		checkf(DeveloperSecretKey.IsEmpty(), TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
+		//...QTN_ENGINE_MOD[kain: 6-9-2020] don't checkf when trying to verify usage of GetDeveloperSecretKey when the key is empty
+		return DeveloperSecretKey;
     }
 
     // Get the developer secret key. These keys can be used in development environments.
@@ -107,8 +109,11 @@ public:
         return DeveloperSecretKey;
 #endif
 
-        checkf(false, TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
-        return DeveloperSecretKey;
+		//QTN_ENGINE_MOD[kain: 6-9-2020] don't checkf when trying to verify usage of GetDeveloperSecretKey when the key is empty...
+		//checkf(false, TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
+		checkf(DeveloperSecretKey.IsEmpty(), TEXT("Cannot call GetDeveloperSecretKey in a non-developer build!"));
+		//...QTN_ENGINE_MOD[kain: 6-9-2020] don't checkf when trying to verify usage of GetDeveloperSecretKey when the key is empty
+		return DeveloperSecretKey;
     }
 
     // Set the developer secret key. These keys can be used in development environments.
