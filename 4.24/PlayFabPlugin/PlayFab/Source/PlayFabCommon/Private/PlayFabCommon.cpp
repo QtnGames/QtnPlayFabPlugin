@@ -41,9 +41,33 @@ class FPlayFabCommonModule : public IPlayFabCommonModuleInterface
     FString GetServerURL() const override { return PlayFabCommon::PlayFabCommonSettings::serverURL; }
     FString GetProductionEnvironmentURL() const override { return PlayFabCommon::PlayFabCommonSettings::productionEnvironmentURL; }
     FString GetTitleId() const override { return (PlayFabCommon::PlayFabCommonSettings::titleId.IsEmpty() ? GetDefault<UPlayFabRuntimeSettings>()->TitleId : PlayFabCommon::PlayFabCommonSettings::titleId); }
-    FString GetClientSessionTicket() const override { return PlayFabCommon::PlayFabCommonSettings::clientSessionTicket; }
+    FString GetClientSessionTicket() const override
+	{
+		//QTN_ENGINE_MOD[kain: 5-21-2020] Static clientSessionTicket breaks multiplayer testing in PIE because all players will share the same ticket...
+		// Hi QtnProgrammer, if you see this msg, stick a breakpoint here to figure out where you need to add
+		// 	_Request.AuthenticationContext = sessionData.m_authenticationContext;
+		if (GEngine)
+		{
+			FString const msg = TEXT("GetClientSessionTicket: Some programmer forgot to set AuthenticationContext on a PlayFab API request, which breaks PIE MP testing");
+			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 25.0f, FColor::Red, msg);
+		}
+		//...QTN_ENGINE_MOD[kain: 5-21-2020]
+		return PlayFabCommon::PlayFabCommonSettings::clientSessionTicket;
+	}
     FString GetDeveloperSecretKey() const override { return (PlayFabCommon::PlayFabCommonSettings::developerSecretKey.IsEmpty() ? GetDefault<UPlayFabRuntimeSettings>()->DeveloperSecretKey : PlayFabCommon::PlayFabCommonSettings::developerSecretKey); }
-    FString GetEntityToken() const override { return PlayFabCommon::PlayFabCommonSettings::entityToken; }
+    FString GetEntityToken() const override
+	{
+		//QTN_ENGINE_MOD[kain: 5-21-2020] Static entityToken breaks multiplayer testing in PIE because all players will share the same token...
+		// Hi QtnProgrammer, if you see this msg, stick a breakpoint here to figure out where you need to add
+		// 	_Request.AuthenticationContext = sessionData.m_authenticationContext;
+		if (GEngine)
+		{
+			FString const msg = TEXT("GetEntityToken: Some programmer forgot to set AuthenticationContext on a PlayFab API request, which breaks PIE MP testing");
+			GEngine->AddOnScreenDebugMessage(INDEX_NONE, 25.0f, FColor::Red, msg);
+		}
+		//...QTN_ENGINE_MOD[kain: 5-21-2020]
+		return PlayFabCommon::PlayFabCommonSettings::entityToken;
+	}
     FString GetAdvertisingIdType() const override { return PlayFabCommon::PlayFabCommonSettings::advertisingIdType; }
     FString GetAdvertisingIdValue() const override { return PlayFabCommon::PlayFabCommonSettings::advertisingIdValue; }
     bool GetDisableAdvertising() const override { return PlayFabCommon::PlayFabCommonSettings::disableAdvertising; }

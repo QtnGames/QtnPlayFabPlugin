@@ -8,6 +8,15 @@
 
 using namespace PlayFab;
 
+//QTN_ENGINE_MOD[kain: 4/30/2020] Template declarations inside DLLs must instantiate all types used by that template in order to be usable outside that DLL...
+// Failure to do this will result in debug configs throwing unresolved externals during compile because debug handles inline differently
+// https://stackoverflow.com/questions/14138360/c-instantiate-template-class-from-dll
+// Most of the types for Boxed were implicitly instantiated through use within this DLL, but some types were not
+// and must be explicitly instantiated within this DLL for use within Question's gameside PlayFab implementation
+template Boxed<FDateTime>;
+template Boxed<int32>;
+//...QTN_ENGINE_MOD[kain: 4/30/2020]
+
 FString FPlayFabCppBaseModel::toJSONString() const
 {
     FString JsonOutString;
